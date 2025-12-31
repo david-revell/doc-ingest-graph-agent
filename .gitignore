@@ -10,7 +10,8 @@ __pycache__/
 chatbot_logs/
 
 # Docs
-docs/BEGINNERS.md
+docs/GETTING_STARTED.md
+docs/INTERNAL_NOTES.md
 
 # OS
 .DS_Store
