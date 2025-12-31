@@ -17,6 +17,15 @@ A clean-start repo focused on three stages:
 - `scripts/` : small utilities (like connection tests)
 - `docs/` : lightweight documentation
 
+## Useful Cypher
+Show a sample of the corpus → document → page chain:
+
+```cypher
+MATCH (c:CORPUS)-[:CONTAINS]->(d:DOCUMENT)-[:CONTAINS]->(p:PAGE)
+RETURN c, d, p
+LIMIT 25
+```
+
 ## Notes
 - `.env` is loaded from the repo root by `src/DB_neo4j.py`.
 - The ingestion pipeline in `src/documentation_model.py` is partially implemented and will be completed later.
