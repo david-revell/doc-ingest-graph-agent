@@ -56,6 +56,8 @@
 5.2 No page summaries/keywords/best representation yet.  
 5.3 Ingestion uses OpenAI embeddings only where facts exist (currently none).  
 5.4 No indexing setup or schema enforcement in Neo4j.  
+5.5 PRA PDFs in `data/` appear to be image‑heavy or protected; text extraction is minimal. OCR or vision is required to process them properly.  
+5.6 OCR/vision adds cost; current scope is cost‑sensitive and should favor text‑extractable PDFs.  
 
 ## 6. Workboard
 
@@ -66,9 +68,11 @@
 6.1.4 Add Neo4j index/vector index setup for facts/pages.  
 6.1.5 Add basic ingestion validation report (counts, missing fields).  
 6.1.6 Add a Streamlit UI for the chatbot (frontend only).  
+6.1.7 Run a small pilot (5–10 pages) to estimate LLM cost before full ingestion.  
+6.1.8 Clean up legacy `data` corpus in Neo4j once corpus scoping is final.  
 
 6.2 In Progress:  
-6.2.1 Development: starting on 6.1.1 (fact extraction).  
+6.2 Development: starting on 6.1.1 (fact extraction) and scoping a low‑cost pilot.  
 
 6.3 Done:  
 6.3.1 Neo4j connection test passes.  

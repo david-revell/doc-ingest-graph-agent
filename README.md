@@ -56,3 +56,6 @@ LIMIT 25
 The ingestion pipeline in `src/documentation_model.py` is partially implemented.
 Stubs are in place for summaries, best representation, fact extraction, and fact embeddings.
 See `docs/DESIGN_STATUS.md` for a full gap list and ordered todo items.
+
+Cost note: PRA PDFs in `data/` are image‑heavy and need OCR/vision to process; that adds cost.
+For a low‑cost start, prefer text‑extractable PDFs and run a small pilot first.
