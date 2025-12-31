@@ -104,7 +104,7 @@ class GraphProcessor:
     async def query_graph(self, question: str, threshold: float = 0.6, 
     doc_limit: int | None = None, total_fact_limit: int | None = None, print_out=False,fact_label:str="FACT", CORPUS:dict=None):
         """Query the graph database for facts similar to the given question."""
-        question_embedding = await self.embed_input(question, model="text-embedding-3-large")
+        question_embedding = await self.embed_input(question, model="text-embedding-3-small")
 
         corpus_filter = ""
         if CORPUS is not None:

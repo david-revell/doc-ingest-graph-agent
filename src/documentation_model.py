@@ -41,7 +41,7 @@ class Fact:
         self.embedding: List[float] = None
         self.neo4j_id: str = None
     
-    async def create_fact_node_with_multiple_pages(self, destination_nodes_ids: List[str], model: str = "text-embedding-3-large"):
+    async def create_fact_node_with_multiple_pages(self, destination_nodes_ids: List[str], model: str = "text-embedding-3-small"):
         """Create a fact node in the graph with connections to multiple pages."""
         if self.embedding is None:
             print("Generating fact embeddings")
@@ -283,7 +283,7 @@ class Document:
             
             if all_facts:
                 # Generate all embeddings concurrently
-                await asyncio.gather(*[fact._generate_fact_embedding(client, model="text-embedding-3-large") for fact in all_facts])
+                await asyncio.gather(*[fact._generate_fact_embedding(client, model="text-embedding-3-small") for fact in all_facts])
                 print(f"Generated embeddings for {len(all_facts)} facts across {len(self.pages)} pages")
             else:
                 print("No facts found to embed in document")

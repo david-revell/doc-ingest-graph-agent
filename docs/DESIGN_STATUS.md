@@ -1,70 +1,83 @@
 # Design And Status
+**Document Ingestion and Knowledge Graph Agent**  
+*docs/DESIGN_STATUS.md*  
 
-This doc is a living snapshot of how the system is designed today, what works,
-and what is missing. It is not a substitute for code comments or README usage.
+---
 
-## Purpose
-- Provide a shared understanding of the data model and pipeline.
-- Record known gaps and limitations, especially in ingestion.
-- Keep a short, ordered todo list that reflects current priorities.
+## 1. Purpose
 
-## Data Model (Neo4j)
-Nodes:
-- `CORPUS`: group of documents (e.g., a folder or dataset)
-- `DOCUMENT`: a single PDF/document
-- `PAGE`: a single page of a document
-- `FACT`: extracted fact from a page (not yet implemented)
+1.1 Provide a shared understanding of the data model and pipeline.  
+1.2 Record known gaps and limitations, especially in ingestion.  
+1.3 Keep a short, ordered todo list that reflects current priorities.  
 
-Relationships:
-- `(:CORPUS)-[:CONTAINS]->(:DOCUMENT)`
-- `(:DOCUMENT)-[:CONTAINS]->(:PAGE)`
-- `(:PAGE)-[:CONTAINS]->(:FACT)` (planned)
-- `(:FACT)-[:QUESTION]->(:PAGE)` (planned)
+## 2. Data Model (Neo4j)
 
-Key properties (current):
-- `DOCUMENT.summary` (currently empty)
-- `PAGE.text`, `PAGE.summary`, `PAGE.keywords`, `PAGE.embedding`
-- `FACT.embedding` (planned)
+2.1 Nodes:  
+2.1.1 `CORPUS`: group of documents (e.g., a folder or dataset)  
+2.1.2 `DOCUMENT`: a single PDF/document  
+2.1.3 `PAGE`: a single page of a document  
+2.1.4 `FACT`: extracted fact from a page (not yet implemented)  
 
-## Pipeline Overview
-1) Ingestion (PDF -> pages -> Neo4j)
-2) Retrieval (Neo4j vector similarity over facts/pages)
-3) Agent (tool-using chat interface)
+2.2 Relationships:  
+2.2.1 `(:CORPUS)-[:CONTAINS]->(:DOCUMENT)`  
+2.2.2 `(:DOCUMENT)-[:CONTAINS]->(:PAGE)`  
+2.2.3 `(:PAGE)-[:CONTAINS]->(:FACT)` (planned)  
+2.2.4 `(:FACT)-[:QUESTION]->(:PAGE)` (planned)  
 
-## Current Status
-Ingestion:
-- Implemented: PDF text extraction, page screenshots, basic document/page nodes.
-- Stubs: document summaries, best representation detection, fact generation,
-  and fact embeddings (see `src/documentation_model.py`).
+2.3 Key properties (current):  
+2.3.1 `DOCUMENT.summary` (currently empty)  
+2.3.2 `PAGE.text`, `PAGE.summary`, `PAGE.keywords`, `PAGE.embedding`  
+2.3.3 `FACT.embedding` (planned)  
 
-Retrieval:
-- Implemented: `GraphProcessor.query_graph` with cosine similarity in Cypher.
-- Implemented: wrappers (`Retrieved_fact`, `Retrieval_by_document`, `Retrieval_overall`).
-- Optional: `compute_similarities` for FACT-FACT similarity (FACT nodes needed).
+## 3. Pipeline Overview
 
-Agent:
-- Implemented: `chatbot_framework.py` with tools for PRA + banks retrieval.
-- Expects facts to exist in Neo4j to be useful.
+3.1 Ingestion (PDF -> pages -> Neo4j)  
+3.2 Retrieval (Neo4j vector similarity over facts/pages)  
+3.3 Agent (tool-using chat interface)  
 
-## Known Gaps / Limitations
-- No real fact extraction yet (stubs only).
-- No page summaries/keywords/best representation yet.
-- Ingestion uses OpenAI embeddings only where facts exist (currently none).
-- No indexing setup or schema enforcement in Neo4j.
+## 4. Current Status
 
-## TODO (Ordered)
-1) Implement fact extraction to populate `FACT` and `QUESTION` nodes.
-2) Implement page summaries and keyword extraction.
-3) Implement page-level embeddings (optional, but useful for fallback retrieval).
-4) Add Neo4j index/vector index setup for facts/pages.
-5) Add basic ingestion validation report (counts, missing fields).
+4.1 Ingestion:  
+4.1.1 Implemented: PDF text extraction, page screenshots, basic document/page nodes.  
+4.1.2 Stubs: document summaries, best representation detection, fact generation, and fact embeddings (see `src/documentation_model.py`).  
 
-## Test TODOs
-1) Agent check: `python src/chatbot_framework.py` and confirm tool calls work.
+4.2 Retrieval:  
+4.2.1 Implemented: `GraphProcessor.query_graph` with cosine similarity in Cypher.  
+4.2.2 Implemented: wrappers (`Retrieved_fact`, `Retrieval_by_document`, `Retrieval_overall`).  
+4.2.3 Optional: `compute_similarities` for FACT-FACT similarity (FACT nodes needed).  
 
-Notes:
-- Retrieval and agent depend on FACT nodes; until fact extraction exists,
-  agent responses will be thin or empty.
+4.3 Agent:  
+4.3.1 Implemented: `chatbot_framework.py` with tools for PRA + banks retrieval.  
+4.3.2 Expects facts to exist in Neo4j to be useful.  
 
-## Notes
-- Keep this doc short and updated after every meaningful pipeline change.
+## 5. Known Gaps / Limitations
+
+5.1 No real fact extraction yet (stubs only).  
+5.2 No page summaries/keywords/best representation yet.  
+5.3 Ingestion uses OpenAI embeddings only where facts exist (currently none).  
+5.4 No indexing setup or schema enforcement in Neo4j.  
+
+## 6. Workboard
+
+6.1 Planned:  
+6.1.1 Implement fact extraction to populate `FACT` and `QUESTION` nodes.  
+6.1.2 Implement page summaries and keyword extraction.  
+6.1.3 Implement page-level embeddings (optional, but useful for fallback retrieval).  
+6.1.4 Add Neo4j index/vector index setup for facts/pages.  
+6.1.5 Add basic ingestion validation report (counts, missing fields).  
+6.1.6 Add a Streamlit UI for the chatbot (frontend only).  
+
+6.2 In Progress:  
+6.2.1 Development: starting on 6.1.1 (fact extraction).  
+
+6.3 Done:  
+6.3.1 Neo4j connection test passes.  
+6.3.2 Basic ingestion run completes (document/page nodes created).  
+6.3.3 Agent CLI runs and returns responses.  
+
+6.4 Notes:  
+6.4.1 Retrieval and agent depend on FACT nodes; until fact extraction exists, agent responses will be thin or empty.  
+
+## 8. Notes
+
+8.1 Keep this doc short and updated after every meaningful pipeline change.

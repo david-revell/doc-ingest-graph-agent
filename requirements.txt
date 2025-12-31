@@ -3,3 +3,8 @@ python-dotenv
 neo4j
 openai
 llama-index
+llama-index-graph-stores-neo4j
+PyPDF2
+PyMuPDF
+Pillow
+numpy

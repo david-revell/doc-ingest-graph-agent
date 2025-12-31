@@ -1,4 +1,5 @@
 import os
+import logging
 from pathlib import Path
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
@@ -14,13 +15,22 @@ load_dotenv(path_to_env)
 NEO4J_URI=os.getenv("NEO4J_URI")    
 NEO4J_USERNAME="neo4j"
 NEO4J_PASSWORD=os.getenv("NEO4J_PASSWORD")
+NEO4J_DEBUG=os.getenv("NEO4J_DEBUG") == "1"
+
+if not NEO4J_DEBUG:
+    logging.getLogger("neo4j").setLevel(logging.ERROR)
+
+
+def _debug(message: str) -> None:
+    if NEO4J_DEBUG:
+        print(message)
 
 
 def get_graph_store():
     # Debug environment variables
-    print(f"NEO4J_URI: {NEO4J_URI}")
-    print(f"NEO4J_USERNAME: {NEO4J_USERNAME}")
-    print(f"NEO4J_PASSWORD: {'*' * len(NEO4J_PASSWORD) if NEO4J_PASSWORD else 'None'}")
+    _debug(f"NEO4J_URI: {NEO4J_URI}")
+    _debug(f"NEO4J_USERNAME: {NEO4J_USERNAME}")
+    _debug(f"NEO4J_PASSWORD: {'*' * len(NEO4J_PASSWORD) if NEO4J_PASSWORD else 'None'}")
     
     if not NEO4J_URI or not NEO4J_PASSWORD:
         raise ValueError("NEO4J_URI and NEO4J_PASSWORD must be set in environment variables")
@@ -38,24 +48,24 @@ def get_graph_store():
             max_connection_pool_size=50,
             connection_acquisition_timeout=60
         )
-        print("✅ Successfully connected to Neo4j with resilient settings")
+        _debug("✅ Successfully connected to Neo4j with resilient settings")
         
         # Test the connection with a simple query
         try:
             test_result = graph_store.structured_query("RETURN 1 as test")
-            print("✅ Connection test successful")
+            _debug("✅ Connection test successful")
         except Exception as test_error:
-            print(f"⚠️ Connection test failed: {test_error}")
+            _debug(f"⚠️ Connection test failed: {test_error}")
         
         # Try schema refresh with timeout handling
         try:
             graph_store.refresh_schema()
-            print("✅ Schema refreshed successfully")
+            _debug("✅ Schema refreshed successfully")
         except Exception as schema_error:
-            print(f"⚠️ Schema refresh failed (continuing anyway): {schema_error}")
+            _debug(f"⚠️ Schema refresh failed (continuing anyway): {schema_error}")
         
     except Exception as e:
-        print(f"❌ Failed to connect to Neo4j: {e}")
+        _debug(f"❌ Failed to connect to Neo4j: {e}")
         raise
     
     return graph_store

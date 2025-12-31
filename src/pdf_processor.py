@@ -320,8 +320,8 @@ async def preproc_bank_documents(folder_path,file_list=None,focus=None,fact_labe
                 await document.generate_document_1stfacts(focus=focus)
 
                 # for page in document.pages:
-                #     await page.embed_page_facts(model="text-embedding-3-large")
-                await document.embed_document_facts(model="text-embedding-3-large")
+                #     await page.embed_page_facts(model="text-embedding-3-small")
+                await document.embed_document_facts(model="text-embedding-3-small")
                 upload_doc_to_neo4j(corpus.neo4j_id,document,fact_label=fact_label)
         else:
             print(f"------------- File already exists: {file} ---------------------")
