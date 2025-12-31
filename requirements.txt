@@ -1,0 +1,5 @@
+# Minimal requirements; will be expanded as code is added
+python-dotenv
+neo4j
+openai
+llama-index

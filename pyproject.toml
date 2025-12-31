@@ -1,0 +1,11 @@
+[project]
+name = "doc-ingest-graph-agent"
+version = "0.1.0"
+description = "Document ingestion, knowledge graph storage, and retrieval agent."
+requires-python = ">=3.10"
+dependencies = [
+  "python-dotenv",
+  "neo4j",
+  "openai",
+  "llama-index",
+]
