@@ -9,6 +9,9 @@ __pycache__/
 # Logs
 chatbot_logs/
 
+# Docs
+docs/BEGINNERS.md
+
 # OS
 .DS_Store
 Thumbs.db
