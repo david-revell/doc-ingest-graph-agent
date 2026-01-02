@@ -61,13 +61,13 @@
 ## 6. Workboard
 
 6.1 Planned:  
-6.1.2 Implement page summaries and keyword extraction.  
-6.1.3 Implement page-level embeddings (optional, but useful for fallback retrieval).  
-6.1.4 Add Neo4j index/vector index setup for facts/pages.  
-6.1.5 Add basic ingestion validation report (counts, missing fields).  
-6.1.6 Add a Streamlit UI for the chatbot (frontend only).  
-6.1.7 Run a small pilot (5-10 pages) to estimate LLM cost before full ingestion.  
-6.1.9 Consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4"). For atomic facts this can be contrived; allow the model to decide the appropriate number of questions.  
+6.1.1 Implement page summaries and keyword extraction.  
+6.1.2 Implement page-level embeddings (optional, but useful for fallback retrieval).  
+6.1.3 Add Neo4j index/vector index setup for facts/pages.  
+6.1.4 Add basic ingestion validation report (counts, missing fields).  
+6.1.5 Add a Streamlit UI for the chatbot (frontend only).  
+6.1.6 Run a small pilot (5-10 pages) to estimate LLM cost before full ingestion.  
+6.1.7 Consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4"). For atomic facts this can be contrived; allow the model to decide the appropriate number of questions.  
 
 6.2 In Progress:  
 6.2 Development: scoping a low-cost pilot.  
