@@ -227,8 +227,6 @@ class Document:
                 page.page_id = f"{self.name}_page_{page_num:03d}"  # Generate unique page ID
                 self.pages.append(page)
         
-        await self._embed_document()
-        
         # Then add screenshots to each page
         with fitz.open(str(self.path)) as pdf_document:
             os.makedirs(image_container_path, exist_ok=True)
@@ -264,15 +262,88 @@ class Document:
         """TODO: detect best representation per page (stub)."""
         print("TODO: detect_best_representation is not implemented yet")
 
-    async def generate_document_1stfacts(self, focus: str = None):
-        """TODO: extract initial facts from the document (stub)."""
-        print("TODO: generate_document_1stfacts is not implemented yet")
+    async def generate_document_1stfacts(
+        self,
+        focus: str = None,
+        model: str = "gpt-5-nano",
+        max_facts_per_page: int = 6,
+        min_text_length: int = 200,
+        max_chars: int = 8000
+    ):
+        """Extract initial facts from the document pages."""
+        if not self.pages:
+            print("No pages found to extract facts from")
+            return
 
-    async def embed_document_facts(self, model: str):
-        """TODO: embed document facts (stub)."""
-        print("TODO: embed_document_facts is not implemented yet")
+        system_prompt = (
+            "You extract atomic, verifiable facts from a single page of a document.\n"
+            "Return JSON only, with this shape:\n"
+            "{ \"facts\": [ { \"answer\": \"...\", \"questions\": [\"...\", \"...\"] } ] }\n"
+            "Rules:\n"
+            f"- Limit to at most {max_facts_per_page} facts.\n"
+            "- Each answer is a short, standalone statement grounded in the page text.\n"
+            "- Each fact must include 2-4 natural questions that the answer resolves.\n"
+            "- Do not invent information; if no facts, return { \"facts\": [] }.\n"
+        )
+        if focus:
+            system_prompt += f"- Prioritize facts relevant to this focus: {focus}\n"
 
-    async def _embed_document(self):
+        client = openai.AsyncOpenAI()
+        try:
+            for page_idx, page in enumerate(self.pages, start=1):
+                page_text = (page.text or "").strip()
+                if len(page_text) < min_text_length:
+                    continue
+
+                print(f"Extracting facts from page {page_idx}/{len(self.pages)}")
+
+                if max_chars and len(page_text) > max_chars:
+                    page_text = page_text[:max_chars]
+
+                messages = [
+                    {"role": "system", "content": [{"type": "text", "text": system_prompt}]},
+                    {"role": "user", "content": [{"type": "text", "text": page_text}]}
+                ]
+
+                try:
+                    response = await client.chat.completions.create(
+                        model=model,
+                        response_format={"type": "json_object"},
+                        messages=messages
+                    )
+                    content = response.choices[0].message.content
+                    parsed = json.loads(content)
+                except Exception as e:
+                    print(f"Fact extraction failed for page {page_idx}: {e}")
+                    continue
+
+                facts_payload = parsed.get("facts", [])
+                if not isinstance(facts_payload, list):
+                    continue
+
+                seen_answers = set()
+                for item in facts_payload:
+                    if not isinstance(item, dict):
+                        continue
+                    answer = (item.get("answer") or "").strip()
+                    questions = [
+                        q.strip() for q in (item.get("questions") or [])
+                        if isinstance(q, str) and q.strip()
+                    ]
+                    if not answer or not questions:
+                        continue
+                    if answer in seen_answers:
+                        continue
+                    seen_answers.add(answer)
+                    page.facts.append(Fact(answer=answer, questions=questions))
+        finally:
+            await client.close()
+
+    async def embed_document_facts(self, model: str = "text-embedding-3-small"):
+        """Generate embeddings for all facts in the document."""
+        await self._embed_document(model=model)
+
+    async def _embed_document(self, model: str = "text-embedding-3-small"):
         """Generate embeddings for all facts in the document."""
         client = openai.AsyncOpenAI()
         try:
@@ -283,7 +354,7 @@ class Document:
             
             if all_facts:
                 # Generate all embeddings concurrently
-                await asyncio.gather(*[fact._generate_fact_embedding(client, model="text-embedding-3-small") for fact in all_facts])
+                await asyncio.gather(*[fact._generate_fact_embedding(client, model=model) for fact in all_facts])
                 print(f"Generated embeddings for {len(all_facts)} facts across {len(self.pages)} pages")
             else:
                 print("No facts found to embed in document")

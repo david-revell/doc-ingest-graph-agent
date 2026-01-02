@@ -16,18 +16,18 @@
 2.1.1 `CORPUS`: group of documents (e.g., a folder or dataset)  
 2.1.2 `DOCUMENT`: a single PDF/document  
 2.1.3 `PAGE`: a single page of a document  
-2.1.4 `FACT`: extracted fact from a page (not yet implemented)  
+2.1.4 `FACT`: extracted fact from a page  
 
 2.2 Relationships:  
 2.2.1 `(:CORPUS)-[:CONTAINS]->(:DOCUMENT)`  
 2.2.2 `(:DOCUMENT)-[:CONTAINS]->(:PAGE)`  
-2.2.3 `(:PAGE)-[:CONTAINS]->(:FACT)` (planned)  
-2.2.4 `(:FACT)-[:QUESTION]->(:PAGE)` (planned)  
+2.2.3 `(:PAGE)-[:CONTAINS]->(:FACT)`  
+2.2.4 `(:FACT)-[:QUESTION]->(:PAGE)`  
 
 2.3 Key properties (current):  
 2.3.1 `DOCUMENT.summary` (currently empty)  
 2.3.2 `PAGE.text`, `PAGE.summary`, `PAGE.keywords`, `PAGE.embedding`  
-2.3.3 `FACT.embedding` (planned)  
+2.3.3 `FACT.embedding`  
 
 ## 3. Pipeline Overview
 
@@ -39,7 +39,7 @@
 
 4.1 Ingestion:  
 4.1.1 Implemented: PDF text extraction, page screenshots, basic document/page nodes.  
-4.1.2 Stubs: document summaries, best representation detection, fact generation, and fact embeddings (see `src/documentation_model.py`).  
+4.1.2 Stubs: document summaries, best representation detection (see `src/documentation_model.py`).  
 
 4.2 Retrieval:  
 4.2.1 Implemented: `GraphProcessor.query_graph` with cosine similarity in Cypher.  
@@ -52,9 +52,8 @@
 
 ## 5. Known Gaps / Limitations
 
-5.1 No real fact extraction yet (stubs only).  
-5.2 No page summaries/keywords/best representation yet.  
-5.3 Ingestion uses OpenAI embeddings only where facts exist (currently none).  
+5.1 No page summaries/keywords/best representation yet.  
+5.2 Ingestion uses OpenAI embeddings only where facts exist (facts now extracted for text pages).  
 5.4 No indexing setup or schema enforcement in Neo4j.  
 5.5 PRA PDFs in `data/` appear to be image‑heavy or protected; text extraction is minimal. OCR or vision is required to process them properly.  
 5.6 OCR/vision adds cost; current scope is cost‑sensitive and should favor text‑extractable PDFs.  
@@ -62,25 +61,22 @@
 ## 6. Workboard
 
 6.1 Planned:  
-6.1.1 Implement fact extraction to populate `FACT` and `QUESTION` nodes.  
 6.1.2 Implement page summaries and keyword extraction.  
 6.1.3 Implement page-level embeddings (optional, but useful for fallback retrieval).  
 6.1.4 Add Neo4j index/vector index setup for facts/pages.  
 6.1.5 Add basic ingestion validation report (counts, missing fields).  
 6.1.6 Add a Streamlit UI for the chatbot (frontend only).  
 6.1.7 Run a small pilot (5–10 pages) to estimate LLM cost before full ingestion.  
-6.1.8 Clean up legacy `data` corpus in Neo4j once corpus scoping is final.  
+6.1.9 Consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4"). For atomic facts this can be contrived; allow the model to decide the appropriate number of questions.  
 
 6.2 In Progress:  
-6.2 Development: starting on 6.1.1 (fact extraction) and scoping a low‑cost pilot.  
+6.2 Development: scoping a low-cost pilot.  
 
 6.3 Done:  
 6.3.1 Neo4j connection test passes.  
 6.3.2 Basic ingestion run completes (document/page nodes created).  
 6.3.3 Agent CLI runs and returns responses.  
-
-6.4 Notes:  
-6.4.1 Retrieval and agent depend on FACT nodes; until fact extraction exists, agent responses will be thin or empty.  
+6.3.4 Implement fact extraction to populate `FACT` and `QUESTION` nodes.  
 
 ## 8. Notes
 
