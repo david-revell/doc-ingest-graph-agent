@@ -55,8 +55,8 @@
 5.1 No page summaries/keywords/best representation yet.  
 5.2 Ingestion uses OpenAI embeddings only where facts exist (facts now extracted for text pages).  
 5.4 No indexing setup or schema enforcement in Neo4j.  
-5.5 PRA PDFs in `data/` appear to be image‑heavy or protected; text extraction is minimal. OCR or vision is required to process them properly.  
-5.6 OCR/vision adds cost; current scope is cost‑sensitive and should favor text‑extractable PDFs.  
+5.5 PRA PDFs in `data/` appear to be image-heavy or protected; text extraction is minimal. OCR or vision is required to process them properly.  
+5.6 OCR/vision adds cost; current scope is cost-sensitive and should favor text-extractable PDFs.  
 
 ## 6. Workboard
 
@@ -66,7 +66,7 @@
 6.1.4 Add Neo4j index/vector index setup for facts/pages.  
 6.1.5 Add basic ingestion validation report (counts, missing fields).  
 6.1.6 Add a Streamlit UI for the chatbot (frontend only).  
-6.1.7 Run a small pilot (5–10 pages) to estimate LLM cost before full ingestion.  
+6.1.7 Run a small pilot (5-10 pages) to estimate LLM cost before full ingestion.  
 6.1.9 Consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4"). For atomic facts this can be contrived; allow the model to decide the appropriate number of questions.  
 
 6.2 In Progress:  
@@ -77,6 +77,13 @@
 6.3.2 Basic ingestion run completes (document/page nodes created).  
 6.3.3 Agent CLI runs and returns responses.  
 6.3.4 Implement fact extraction to populate `FACT` and `QUESTION` nodes.  
+
+## 7. Observations
+
+7.1 Cost (early baseline): two ingestion runs on `CitiGroup_2025_Q2_earnings_call_transcript.pdf` each used 20,658 tokens.  
+7.2 FACT -> QUESTION is 1-to-1 in practice for atomic facts (a single fact is a minimal, standalone statement).  
+7.3 Scale assumption: design for tens of pages (personal project), with headroom to scale if needed. This favors low-cost text extraction before OCR/vision.  
+7.4 Logging/progress: avoid misleading logs (e.g., embedding before facts exist). Prefer explicit per-page progress during extraction.  
 
 ## 8. Notes
 

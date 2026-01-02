@@ -38,12 +38,12 @@ This project uses two kinds of models:
    - Change by editing the `llm_model` argument
 
 2) Embedding model (retrieval + ingestion)
-   - Default: `text-embedding-3-small` (cost‑saving choice)
+   - Default: `text-embedding-3-small` (cost-saving choice)
    - Locations: `src/process_graph.py`, `src/documentation_model.py`, `src/pdf_processor.py`
    - Change to `text-embedding-3-large` if you want higher quality
 
 ## Useful Cypher
-Show a sample of the corpus → document → page chain:
+Show a sample of the corpus -> document -> page chain:
 
 ```cypher
 MATCH (c:CORPUS)-[:CONTAINS]->(d:DOCUMENT)-[:CONTAINS]->(p:PAGE)
@@ -51,11 +51,17 @@ RETURN c, d, p
 LIMIT 25
 ```
 
-## Notes
 ## Status
 The ingestion pipeline in `src/documentation_model.py` is partially implemented.
-Stubs are in place for summaries, best representation, fact extraction, and fact embeddings.
+Stubs are still in place for summaries and best representation detection.
 See `docs/DESIGN_STATUS.md` for a full gap list and ordered todo items.
 
-Cost note: PRA PDFs in `data/` are image‑heavy and need OCR/vision to process; that adds cost.
-For a low‑cost start, prefer text‑extractable PDFs and run a small pilot first.
+Cost note: PRA PDFs in `data/` are image-heavy and need OCR/vision to process; that adds cost.
+For a low-cost start, prefer text-extractable PDFs and run a small pilot first.
+
+## Terminology
+- Atomic fact: a minimal, standalone statement that can be verified from the page text without extra context.
+
+## Cost baseline (early)
+- Two ingestion runs on `CitiGroup_2025_Q2_earnings_call_transcript.pdf` each used 20,658 tokens.
+- Working assumption: this personal project targets tens of pages, with headroom to scale later.
