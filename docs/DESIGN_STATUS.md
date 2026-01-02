@@ -39,7 +39,7 @@
 
 4.1 Ingestion:  
 4.1.1 Implemented: PDF text extraction, page screenshots, basic document/page nodes.  
-4.1.2 Stubs: document summaries, best representation detection (see `src/documentation_model.py`).  
+4.1.2 Stubs (original, not implemented): document summaries and best representation detection (see `src/documentation_model.py`).  
 
 4.2 Retrieval:  
 4.2.1 Implemented: `GraphProcessor.query_graph` with cosine similarity in Cypher.  
@@ -61,13 +61,26 @@
 ## 6. Workboard
 
 6.1 Planned:  
-6.1.1 Implement page summaries and keyword extraction.  
-6.1.2 Implement page-level embeddings (optional, but useful for fallback retrieval).  
-6.1.3 Add Neo4j index/vector index setup for facts/pages.  
-6.1.4 Add basic ingestion validation report (counts, missing fields).  
-6.1.5 Add a Streamlit UI for the chatbot (frontend only).  
-6.1.6 Run a small pilot (5-10 pages) to estimate LLM cost before full ingestion.  
-6.1.7 Consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4"). For atomic facts this can be contrived; allow the model to decide the appropriate number of questions.  
+*(Note: Labels: "Stubbed" = previously existing TODOs in code; "Nice-to-have" = ideas we added later.)*
+
+6.1.1 Nice-to-have: add a basic ingestion validation report (via Cypher queries).
+After stabilising ingestion and fact extraction, the next step is to add cheap, deterministic sanity checks before building further LLM-dependent features. This is not a UI or generated report, but a small set of Cypher queries run manually in Neo4j Browser to confirm ingestion quality (e.g. document/page/fact counts, pages with zero facts, facts with zero questions).  
+
+Ideas:
+- Count documents, pages, facts
+- Find pages with zero facts
+- Find facts with zero questions
+- Simple per-page fact distribution
+
+---
+
+6.1.2 Nice-to-have: add Neo4j index / vector index setup for facts/pages.  
+6.1.3 Nice-to-have: implement page-level embeddings (optional, but useful for fallback retrieval; see `_generate_page_embedding()` in `src/pdf_processor.py`).  
+6.1.4 Nice-to-have: consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4").  
+6.1.5 Nice-to-have: add a basic Streamlit demo UI (read-only).  
+6.1.6 Stubbed: implement page summaries and keyword extraction (see `Document.generate_document_summaries()` in `src/documentation_model.py`).  
+6.1.7 Stubbed (stretch): implement best representation detection for pages (see `Document.detect_best_representation()` in `src/documentation_model.py`).  
+6.1.8 Nice-to-have (later): extend Streamlit UI with controls / richer interaction.
 
 6.2 In Progress:  
 6.2 Development: scoping a low-cost pilot.  
