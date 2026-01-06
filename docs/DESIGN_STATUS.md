@@ -63,24 +63,13 @@
 6.1 Planned:  
 *(Note: Labels: "Stubbed" = previously existing TODOs in code; "Nice-to-have" = ideas we added later.)*
 
-6.1.1 Nice-to-have: add a basic ingestion validation report (via Cypher queries).
-After stabilising ingestion and fact extraction, the next step is to add cheap, deterministic sanity checks before building further LLM-dependent features. This is not a UI or generated report, but a small set of Cypher queries run manually in Neo4j Browser to confirm ingestion quality (e.g. document/page/fact counts, pages with zero facts, facts with zero questions).  
-
-Ideas:
-- Count documents, pages, facts
-- Find pages with zero facts
-- Find facts with zero questions
-- Simple per-page fact distribution
-
----
-
-6.1.2 Nice-to-have: add Neo4j index / vector index setup for facts/pages.  
-6.1.3 Nice-to-have: implement page-level embeddings (optional, but useful for fallback retrieval; see `_generate_page_embedding()` in `src/pdf_processor.py`).  
-6.1.4 Nice-to-have: consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4").  
-6.1.5 Nice-to-have: add a basic Streamlit demo UI (read-only).  
-6.1.6 Stubbed: implement page summaries and keyword extraction (see `Document.generate_document_summaries()` in `src/documentation_model.py`).  
-6.1.7 Stubbed (stretch): implement best representation detection for pages (see `Document.detect_best_representation()` in `src/documentation_model.py`).  
-6.1.8 Nice-to-have (later): extend Streamlit UI with controls / richer interaction.
+6.1.1 Nice-to-have: add Neo4j index / vector index setup for facts/pages.  
+6.1.2 Nice-to-have: implement page-level embeddings (optional, but useful for fallback retrieval; see `_generate_page_embedding()` in `src/pdf_processor.py`).  
+6.1.3 Nice-to-have: consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4").  
+6.1.4 Nice-to-have: add a basic Streamlit demo UI (read-only).  
+6.1.5 Stubbed: implement page summaries and keyword extraction (see `Document.generate_document_summaries()` in `src/documentation_model.py`).  
+6.1.6 Stubbed (stretch): implement best representation detection for pages (see `Document.detect_best_representation()` in `src/documentation_model.py`).  
+6.1.7 Nice-to-have (later): extend Streamlit UI with controls / richer interaction.
 
 6.2 In Progress:  
 6.2 Development: scoping a low-cost pilot.  
@@ -90,6 +79,7 @@ Ideas:
 6.3.2 Basic ingestion run completes (document/page nodes created).  
 6.3.3 Agent CLI runs and returns responses.  
 6.3.4 Implement fact extraction to populate `FACT` and `QUESTION` nodes.  
+6.3.5 Added ingestion validation queries and notes (see `docs/queries/ingestion_validation.cypher` and `docs/ingestion_validation.md`).  
 
 ## 7. Observations
 
