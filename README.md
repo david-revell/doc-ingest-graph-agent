@@ -1,9 +1,8 @@
 # Document Ingestion and Knowledge Graph Agent
 
-A clean-start repo focused on three stages:
-1) Document ingestion
-2) Knowledge graph storage (Neo4j)
-3) Retrieval and agent interface
+An agentic system that ingests PDF documents, extracts structured facts into a Neo4j knowledge graph, and answers questions via an LLM over graph-based retrieval.
+
+The project focuses on end-to-end ingestion, explicit graph structure, and inspectable retrieval, rather than opaque vector-only RAG.
 
 ## Quick start
 1) Copy `.env.example` to `.env` and fill values.
