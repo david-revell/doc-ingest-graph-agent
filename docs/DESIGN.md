@@ -67,13 +67,14 @@ This document is live and updated as the pipeline evolves. For recent changes an
 6.1 Planned:  
 *(Note: Labels: "Stubbed" = previously existing TODOs in code; "Nice-to-have" = ideas we added later.)*
 
-6.1.1 Nice-to-have: add Neo4j index / vector index setup for facts/pages.  
-6.1.2 Nice-to-have: implement page-level embeddings (optional, but useful for fallback retrieval; see `_generate_page_embedding()` in `src/pdf_processor.py`).  
-6.1.3 Nice-to-have: consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4").  
-6.1.4 Nice-to-have: add a basic Streamlit demo UI (read-only).  
-6.1.5 Stubbed: implement page summaries and keyword extraction (see `Document.generate_document_summaries()` in `src/documentation_model.py`).  
-6.1.6 Stubbed (stretch): implement best representation detection for pages (see `Document.detect_best_representation()` in `src/documentation_model.py`).  
-6.1.7 Nice-to-have (later): extend Streamlit UI with controls / richer interaction.
+6.1.1 Nice-to-have: add a small ingestion report script that runs the validation/useful Cypher and outputs a clean summary.  
+6.1.2 Nice-to-have: add a basic Streamlit demo UI (read-only).  
+6.1.3 Nice-to-have: add Neo4j index / vector index setup for facts/pages.  
+6.1.4 Nice-to-have: implement page-level embeddings (optional, but useful for fallback retrieval; see `_generate_page_embedding()` in `src/pdf_processor.py`).  
+6.1.5 Nice-to-have: consider revising the fact-extraction prompt by removing the requirement to generate a specific number of questions per fact (currently "2-4").  
+6.1.6 Stubbed: implement page summaries and keyword extraction (see `Document.generate_document_summaries()` in `src/documentation_model.py`).  
+6.1.7 Stubbed (stretch): implement best representation detection for pages (see `Document.detect_best_representation()` in `src/documentation_model.py`).  
+6.1.8 Nice-to-have (later): extend Streamlit UI with controls / richer interaction.
 
 6.2 In Progress:  
 6.2 Development: scoping a low-cost pilot.  
