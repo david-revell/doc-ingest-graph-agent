@@ -63,6 +63,7 @@ Optional:
 - `src/` : core source code
 - `scripts/` : small utilities (like connection tests)
 - `docs/` : lightweight documentation
+  - See `docs/GETTING_STARTED.md` for beginner notes on repo conventions and setup.
 
 ## Models
 This project uses two kinds of models:
