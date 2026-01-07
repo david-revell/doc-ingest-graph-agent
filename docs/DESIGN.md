@@ -1,6 +1,6 @@
-# Design And Status
+# Design
 **Document Ingestion and Knowledge Graph Agent**  
-*docs/DESIGN_STATUS.md*  
+*docs/DESIGN.md*  
 
 ---
 
@@ -9,6 +9,9 @@
 1.1 Provide a shared understanding of the data model and pipeline.  
 1.2 Record known gaps and limitations, especially in ingestion.  
 1.3 Keep a short, ordered todo list that reflects current priorities.  
+
+## Status
+This document is live and updated as the pipeline evolves. For recent changes and remaining gaps, see Workboard and Known Gaps / Limitations.
 
 ## 2. Data Model (Neo4j)
 
