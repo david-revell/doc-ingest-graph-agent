@@ -285,7 +285,7 @@ def upsert_if_not_exist(node_name:str,label:str,properties:dict):
     """upsert if not exist reverts with node_id"""
     found_nodes=graph_processor.find_existing_node(node_name,label)
     if len(found_nodes)==1:
-        return found_nodes[0].id
+        return found_nodes[0]["id"]
     elif len(found_nodes)==0:
         node_to_insert=EntityNode(name=node_name,label=label,properties=properties)
         graph_store.upsert_nodes([node_to_insert])

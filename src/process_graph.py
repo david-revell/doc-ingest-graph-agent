@@ -264,7 +264,7 @@ class GraphProcessor:
         check_exists_query=f"""
         MATCH(n:{label})
         WHERE n.name='{node_name}'
-        RETURN n.name
+        RETURN n.name AS name, coalesce(n.id, elementId(n)) AS id
         """
         found_nodes=_execute_query(self.driver,check_exists_query)
         return found_nodes

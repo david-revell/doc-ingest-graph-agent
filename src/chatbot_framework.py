@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from llama_index.core.prompts import PromptTemplate
 from llama_index.llms.openai import OpenAI as llama_openai  
 
@@ -147,24 +147,22 @@ class AsyncConversation():
             
             ## Tools
             - **RAG_tool_banks** : retrieve information from bank documents. Use optional filter to search a specific bank.
-            - **RAG_tool_pra** : retrieve PRA rules in relation with user question.
             - **get_docs_descriptions_tool** : overview of corpus.
  
             ## Conversation flow
             1) Get employee question if none being currently discussed: if employee ask for content use get_docs_descriptions_tool to get information about the corpus.
-            2) Once question collected and to answer it: start by using **RAG_tool_pra** to get information from PRA Rulebook to enhance the question from employee and answer employee by proposing the enhancements. 
-            3) Once  employee reacted to information on PRA: Use **RAG_tool_banks** to search for information in bank documents to answer employee question.            
-            4) Loop: “Refine or check anything else?”
+            2) Use **RAG_tool_banks** to search for information in bank documents to answer employee question.
+            3) Loop: Refine or check anything else?
             
             ## Instructions
                 - Prioritize facts by relevance, focus the answer on the most relevant facts and use other facts as follow-up when relevant.  
                 - Answer ONLY from the corpus using approved tools. If info is not in the corpus, say so.
                 - Never use external facts.
-                - WHen completing step 2) ALWAYS answer employee before proceeding to next steps (i.e: before using RAG_tool_banks)
-                - When completing step 3) ALWAYS separate large questions in smaller questions to ask the RAG_tool_banks.
-                - Whenu using RAG_tool_banks, on the basis of a PRA enhancement: 
-                    o the information from PRA may be quite exhaustive, you must therefore synthetize them in a serie of questions to ask the RAG_tool_banks.
-                    o You must then think: "Here is my audit plan on the basis of PRA extracted information: [1st question to ask the RAG_tool_banks] , [2nd question to ask the RAG_tool_banks] ...etc"
+                - Do not use RAG_tool_pra for now.
+                - When completing step 2) ALWAYS separate large questions in smaller questions to ask the RAG_tool_banks.
+
+
+
                 - if tool fails: never make up information, just say so.
 
 
@@ -175,18 +173,17 @@ class AsyncConversation():
             ## Expected output
                 ### Output format: Return ONLY this JSON (no extra fields, text, or tool dumps):
 
-                {{"answer":"answer to employee","relevant_fact_ids":{{"BANKS":[<id1>,<id2>,...],"PRA":[<id1>,<id2>,...] }}  }}
+                {{"answer":"answer to employee","relevant_fact_ids":{{"BANKS":[<id1>,<id2>,...] }}  }}
 
                 Note: Fact IDs follow the format: nodeType:uuid:internalId  the collected must be the whole format (e.g., "4:e43eb764-a2c6-44ce-993e-d18abbf24318:3137")
 
                 ### Formatting rules:
-                If answering employee to provide outcome of RAG_tool_pra or RAG_tool_banks:
+                If answering employee to provide outcome of RAG_tool_banks:
                     - The answer must be conversational and as synthetic as possible. Keep the answer as focused as possible keeping only essential facts.               
                     - Store the fact ids that enabled you to answer in the appropriate field,i.e:
-                        o selected fact ids from RAG_tool_pra {{"PRA":[id1, id2,...]}}
+
                         o selected fact ids from RAG_tool_banks {{"BANK":[id1, id2,...]}}
-                
-                If answering employee without using RAG_tool_pra or RAG_tool_banks: target a short answer (≤120 words). and leave relevant_fact_ids as empty dictionary {{}} 
+                If answering employee without using RAG_tool_banks: target a short answer (=120 words). and leave relevant_fact_ids as empty dictionary {{}}
 
                 Mirror employee langage            
 
@@ -345,3 +342,5 @@ async def conversation_process(verbose=False,print_reasoning_steps=False):
 
 if __name__ == "__main__":
     asyncio.run(conversation_process())
+
+

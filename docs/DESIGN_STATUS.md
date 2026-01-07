@@ -47,7 +47,7 @@
 4.2.3 Optional: `compute_similarities` for FACT-FACT similarity (FACT nodes needed).  
 
 4.3 Agent:  
-4.3.1 Implemented: `chatbot_framework.py` with tools for PRA + banks retrieval.  
+4.3.1 Implemented: `chatbot_framework.py` with tools for PRA + banks retrieval (PRA is disabled by prompt for now).  
 4.3.2 Expects facts to exist in Neo4j to be useful.  
 
 ## 5. Known Gaps / Limitations
@@ -57,6 +57,7 @@
 5.4 No indexing setup or schema enforcement in Neo4j.  
 5.5 PRA PDFs in `data/` appear to be image-heavy or protected; text extraction is minimal. OCR or vision is required to process them properly.  
 5.6 OCR/vision adds cost; current scope is cost-sensitive and should favor text-extractable PDFs.  
+5.7 PRA rulebooks are not used by the agent right now; the system prompt instructs the bot to skip PRA until OCR/vision is in place.  
 
 ## 6. Workboard
 
